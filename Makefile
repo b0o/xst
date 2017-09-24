@@ -4,7 +4,7 @@
 VERSION = 0.7
 
 # paths
-PREFIX = /usr/local
+PREFIX = /usr
 MANPREFIX = ${PREFIX}/share/man
 
 X11INC = /usr/X11R6/include
@@ -70,7 +70,7 @@ install: all
 	@chmod 644 ${DESTDIR}${MANPREFIX}/man1/st.1
 	@echo Please see the README file regarding the terminfo entry of st.
 	@mkdir -p ${DESTDIR}/${PREFIX}/share/terminfo
-	@tic -o ${DESTDIR}/${PREFIX}/share/terminfo -sx doc/st.info 
+	@tic -o ${DESTDIR}/${PREFIX}/share/terminfo -sx doc/st.info
 
 uninstall:
 	@echo removing executable file from ${DESTDIR}${PREFIX}/bin
