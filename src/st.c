@@ -98,7 +98,8 @@ char *argv0;
 #define FALSE 0
 
 #define XRESOURCE_LOAD_META(NAME)                                  \
-	if(!XrmGetResource(xrdb, "st." NAME, "st." NAME, &type, &ret)) \
+	sprintf(key, "%s.%s", usedxresources, NAME); \
+	if(!XrmGetResource(xrdb, key, key, &type, &ret)) \
 		XrmGetResource(xrdb, "*." NAME, "*." NAME, &type, &ret);   \
 	if (ret.addr != NULL && !strncmp("String", type, 64))
 
@@ -585,19 +586,22 @@ static int cmdfd;
 static pid_t pid;
 static Selection sel;
 static int iofd = 1;
-static char **opt_cmd  = NULL;
-static char *opt_class = NULL;
-static char *opt_embed = NULL;
-static char *opt_font  = NULL;
-static char *opt_io    = NULL;
-static char *opt_line  = NULL;
-static char *opt_name  = NULL;
-static char *opt_title = NULL;
+static char **opt_cmd       = NULL;
+static char *opt_class      = NULL;
+static char *opt_embed      = NULL;
+static char *opt_font       = NULL;
+static char *opt_io         = NULL;
+static char *opt_line       = NULL;
+static char *opt_name       = NULL;
+static char *opt_title      = NULL;
+static char *opt_xresources = NULL;
 static int oldbutton   = 3; /* button event on startup: 3 = release */
 
 static char *usedfont = NULL;
 static double usedfontsize = 0;
 static double defaultfontsize = 0;
+
+static char *usedxresources = NULL;
 
 static uchar utfbyte[UTF_SIZ + 1] = {0x80,    0, 0xC0, 0xE0, 0xF0};
 static uchar utfmask[UTF_SIZ + 1] = {0xC0, 0x80, 0xE0, 0xF0, 0xF8};
@@ -4740,11 +4744,11 @@ usage(void)
 {
 	die("usage: %s [-aiv] [-A alpha] [-c class] [-f font] [-g geometry]"
 	    " [-n name]\n"
-	    "          [-o file] [-T title] [-t title] [-w windowid]\n"
+	    "          [-o file] [-T title] [-t title] [-w windowid] [-x xresourcename]\n"
 	    "          [[-e] command [args ...]]\n"
 	    "       %s [-aiv] [-A alpha] [-c class] [-f font] [-g geometry]"
 	    " [-n name]\n"
-	    "          [-o file] [-T title] [-t title] [-w windowid]\n"
+	    "          [-o file] [-T title] [-t title] [-w windowid] [-x xresourcename]\n"
 		"          -l line [stty_args ...]\n", argv0, argv0);
 }
 
@@ -4754,9 +4758,12 @@ xrdb_load(void)
 	/* XXX */
 	char *xrm;
 	char *type;
+	char key[64] = ""; // Not sure if this is safe/proper... I'm a C noob
 	XrmDatabase xrdb;
 	XrmValue ret;
 	Display *dpy;
+
+	usedxresources = (opt_xresources == NULL)? xresources : opt_xresources;
 
 	if(!(dpy = XOpenDisplay(NULL)))
 		die("Can't open display\n");
@@ -4772,7 +4779,7 @@ xrdb_load(void)
 		char loadValue[12] = "";
 		for (i = 0; i < 256; i++)
 		{
-			sprintf(loadValue, "%s%d", "st.color", i);
+			sprintf(loadValue, "%s.%s%d", usedxresources, "color", i);
 
 			if(!XrmGetResource(xrdb, loadValue, loadValue, &type, &ret))
 			{
@@ -4786,6 +4793,7 @@ xrdb_load(void)
 			if (ret.addr != NULL && !strncmp("String", type, 64))
 				colorname[i] = ret.addr;
 		}
+
 
 		XRESOURCE_LOAD_STRING("foreground", colorname[256]);
 		XRESOURCE_LOAD_STRING("background", colorname[257]);
@@ -4900,6 +4908,10 @@ main(int argc, char *argv[])
 		break;
 	case 'v':
 		die("%s " VERSION " (c) 2010-2016 st engineers\n", argv0);
+		break;
+	case 'x':
+		opt_xresources = EARGF(usage());
+		if(strlen(opt_xresources) > 32) die("-x cannot exceet 32 characters\n");
 		break;
 	default:
 		usage();

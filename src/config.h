@@ -8,6 +8,9 @@ static unsigned int rows = 24;
 /* ref: http://freedesktop.org/software/fontconfig/fontconfig-user.html */
 static char *font = "Liberation Mono:pixelsize=12:antialias=true:autohint=true;";
 
+/* xresources identifier */
+static char *xresources = "st";
+
 /* exec precedence: -e arg, utmp option, SHELL env var, /etc/passwd shell */
 static char *shell = "\0";
 
