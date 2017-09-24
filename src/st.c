@@ -118,7 +118,7 @@ char *argv0;
 	XRESOURCE_LOAD_META(NAME)           \
 		DST = strtof(ret.addr, NULL);
 
-#define ISO14755CMD		"dmenu -w %lu -p codepoint: </dev/null"
+#define ISO14755CMD		"dmenu -w %lu -p codepoint: </dev/null | tr ',' '\n'"
 
 enum glyph_attribute {
 	ATTR_NULL       = 0,
@@ -2780,16 +2780,19 @@ iso14755(const Arg *arg)
 	if (!(p = popen(cmd, "r")))
 		return;
 
-	us = fgets(codepoint, sizeof(codepoint), p);
+	while (1) {
+		us = fgets(codepoint, sizeof(codepoint), p);
+		if (us == NULL || !us || *us == '\0' ||
+				*us == '-' || strlen(us) > 7)
+			break;
+		if ((utf32 = strtoul(us, &e, 16)) == ULONG_MAX ||
+				(*e != '\n' && *e != '\0'))
+			break;
+
+		ttysend(uc, utf8encode(utf32, uc));
+	}
+
 	pclose(p);
-
-	if (!us || *us == '\0' || *us == '-' || strlen(us) > 7)
-		return;
-	if ((utf32 = strtoul(us, &e, 16)) == ULONG_MAX ||
-	    (*e != '\n' && *e != '\0'))
-		return;
-
-	ttysend(uc, utf8encode(utf32, uc));
 }
 
 void
