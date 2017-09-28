@@ -171,6 +171,7 @@ static Shortcut shortcuts[] = {
 	{ MODKEY,                  XK_Num_Lock,    numlock,        {.i =  0}  },
   { MODKEY|ControlMask,      XK_i,           iso14755,       {.i =  0}  },
 	{ MODKEY,                  'u',            externalpipe,   {.v = "xurls | eval dmenu $(dmenu_options) | xargs -r $BROWSER" } },
+	{ MODKEY|ShiftMask,        XK_greater,     sendstr,        {.v = "❤" } },
 };
 
 

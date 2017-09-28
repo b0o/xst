@@ -368,6 +368,7 @@ static void toggleprinter(const Arg *);
 static void sendbreak(const Arg *);
 static void externalpipe(const Arg *);
 static void iso14755(const Arg *);
+static void sendstr(const Arg *);
 
 /* Config.h for applying patches and the configuration. */
 #include "config.h"
@@ -2759,6 +2760,13 @@ sendbreak(const Arg *arg)
 {
 	if (tcsendbreak(cmdfd, 0))
 		perror("Error sending break");
+}
+
+void
+sendstr(const Arg *arg)
+{
+	char *str = (char *)arg->v;
+	ttysend(str, strlen(str));
 }
 
 void
