@@ -170,7 +170,7 @@ static Shortcut shortcuts[] = {
 
 	{ MODKEY,                       XK_Num_Lock,    numlock,        {.i =  0}  },
   { MODKEY|ControlMask,           XK_i,           iso14755,       {.i =  0}  },
-	{ MODKEY,                       'u',            externalpipe,   {.v = "xurls | eval dmenu $(dmenu_options) | xargs -r $BROWSER" } },
+	{ MODKEY,                       'u',            externalpipe,   {.v = "raw=\"$(</dev/stdin)\"; urls=($(echo \"${raw}\" | xurls | uniq)); [[ ${#urls[@]} -gt 0 ]] && printf '%s\n' \"${urls[@]}\" | dmenu | xargs xdg-open" } },
 	{ MODKEY|ShiftMask,             XK_greater,     sendstr,        {.v = "❤" } },
 };
 
