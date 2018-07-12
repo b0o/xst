@@ -26,10 +26,10 @@ static float cwscale = 1.0;
 static float chscale = 1.0;
 
 /* Underline thickness (px) */
-static unsigned int ulthick = 4;
+static unsigned int ulthick = 2;
 
 /* Strikethrough thickness (px) */
-static unsigned int stthick = 4;
+static unsigned int stthick = 2;
 
 /* work delimter strings. more advanced example : " `'\"()[]{}" */
 static char worddelimiters[] = " ";
