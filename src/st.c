@@ -4201,13 +4201,13 @@ xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, i
 
 	/* Render underline and strikethrough. */
 	if (base.mode & ATTR_UNDERLINE) {
-		XftDrawRect(xw.draw, fg, winx, winy + xw.cyo + dc.font.ascent + 1,
-				width, 1);
+		XftDrawRect(xw.draw, fg, winx, winy + xw.cyo + dc.font.ascent + ulthick,
+				width, ulthick);
 	}
 
 	if (base.mode & ATTR_STRUCK) {
-		XftDrawRect(xw.draw, fg, winx, winy + xw.cyo + 2 * dc.font.ascent / 3,
-				width, 1);
+		XftDrawRect(xw.draw, fg, winx, winy + xw.cyo - (stthick / 2) + ( 2 * ( dc.font.ascent / 3)),
+				width, stthick);
 	}
 
 	/* Reset clip to none. */
