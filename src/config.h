@@ -178,6 +178,9 @@ static Shortcut shortcuts[] = {
   { MODKEY|ControlMask,           XK_i,           iso14755,       {.i =  0}  },
 	{ MODKEY,                       'u',            externalpipe,   {.v = "raw=\"$(</dev/stdin)\"; urls=($(echo \"${raw}\" | xurls | uniq)); [[ ${#urls[@]} -gt 0 ]] && printf '%s\n' \"${urls[@]}\" | dmenu | xargs xdg-open" } },
 	{ MODKEY|ShiftMask,             XK_greater,     sendstr,        {.v = "❤" } },
+
+	// backward-delete-char
+	{ ControlMask|ShiftMask,        XK_D,           sendstr,        {.v = "\x1ah" }  },
 };
 
 
