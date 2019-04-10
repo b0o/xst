@@ -1,8 +1,8 @@
-.TH ST 1 st\-VERSION
+.TH XST 1 xst\-VERSION
 .SH NAME
-st \- simple terminal
+xst \- xsimpleterm
 .SH SYNOPSIS
-.B st
+.B xst
 .RB [ \-aiv ]
 .RB [ \-A
 .IR alpha ]
@@ -28,7 +28,7 @@ st \- simple terminal
 .IR command
 .RI [ arguments ...]]
 .PP
-.B st
+.B xst
 .RB [ \-aiv ]
 .RB [ \-A
 .IR alpha ]
@@ -52,7 +52,7 @@ st \- simple terminal
 .IR line
 .RI [ stty_args ...]
 .SH DESCRIPTION
-.B st
+.B xst
 is a simple terminal emulator.
 .SH OPTIONS
 .TP
@@ -60,7 +60,7 @@ is a simple terminal emulator.
 disable alternate screens in terminal
 .TP
 .BI \-A " alpha"
-defines the window opacity (default from "st.opacity" xrdb value or 255).
+defines the window opacity (default from "xst.opacity" xrdb value or 255).
 Opacity 255 means what terminal will be not transparent, 0 — fully transparent.
 .TP
 .BI \-c " class"
@@ -69,7 +69,7 @@ defines the window class (default $TERM).
 .BI \-f " font"
 defines the
 .I font
-to use when st is run.
+to use when xst is run.
 .TP
 .BI \-g " geometry"
 defines the X11 geometry string.
@@ -86,17 +86,17 @@ defines the window instance name (default $TERM).
 .BI \-o " iofile"
 writes all the I/O to
 .I iofile.
-This feature is useful when recording st sessions. A value of "-" means
+This feature is useful when recording xst sessions. A value of "-" means
 standard output.
 .TP
 .BI \-T " title"
-defines the window title (default 'st').
+defines the window title (default 'xst').
 .TP
 .BI \-t " title"
-defines the window title (default 'st').
+defines the window title (default 'xst').
 .TP
 .BI \-w " windowid"
-embeds st within the window identified by
+embeds xst within the window identified by
 .I windowid
 .TP
 .BI \-l " line"
@@ -109,13 +109,13 @@ should be a (pseudo-)serial device (e.g. /dev/ttyS0 on Linux for serial port
 When this flag is given
 remaining arguments are used as flags for
 .BR stty(1).
-By default st initializes the serial line to 8 bits, no parity, 1 stop bit
+By default xst initializes the serial line to 8 bits, no parity, 1 stop bit
 and a 38400 baud rate. The speed is set by appending it as last argument
-(e.g. 'st -l /dev/ttyS0 115200'). Arguments before the last one are
+(e.g. 'xst -l /dev/ttyS0 115200'). Arguments before the last one are
 .BR stty(1)
-flags. If you want to set odd parity on 115200 baud use for example 'st -l
+flags. If you want to set odd parity on 115200 baud use for example 'xst -l
 /dev/ttyS0 parenb parodd 115200'. Set the number of bits by using for
-example 'st -l /dev/ttyS0 cs7 115200'. See
+example 'xst -l /dev/ttyS0 cs7 115200'. See
 .BR stty(1)
 for more arguments and cases.
 .TP
@@ -123,7 +123,7 @@ for more arguments and cases.
 prints version information to stderr, then exits.
 .TP
 .BI \-e " command " [ " arguments " "... ]"
-st executes
+xst executes
 .I command
 instead of the shell.  If this is used it
 .B must be the last option
@@ -139,7 +139,7 @@ Break key is obtained in PC keyboards
 pressing at the same time control and pause.
 .TP
 .B Ctrl-Print Screen
-Toggle if st should print to the
+Toggle if xst should print to the
 .I iofile.
 .TP
 .B Shift-Print Screen
@@ -173,9 +173,9 @@ Paste from the clipboard selection.
 .TP
 .B Alt-Ctrl
 Launch dmenu to enter a unicode codepoint and send the corresponding glyph
-to st.
+to xst.
 .SH CUSTOMIZATION
-.B st
+.B xst
 can be customized by creating a custom config.h and (re)compiling the source
 code. This keeps it fast, secure and simple.
 .SH AUTHORS

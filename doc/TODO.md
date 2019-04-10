@@ -30,5 +30,5 @@ bugs
 misc
 ----
 
-`$ grep -nE 'XXX|TODO' st.c`
+`$ grep -nE 'XXX|TODO' xst.c`
 

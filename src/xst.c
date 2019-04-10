@@ -1038,9 +1038,9 @@ char *getsel(void) {
      * Copy and pasting of line endings is inconsistent
      * in the inconsistent terminal and GUI world.
      * The best solution seems like to produce '\n' when
-     * something is copied from st and convert '\n' to
+     * something is copied from xst and convert '\n' to
      * '\r', when something to be pasted is received by
-     * st.
+     * xst.
      * FIXME: Fix the computer world.
      */
     if ((y < sel.ne.y || lastx >= linelen) && !(last->mode & ATTR_WRAP))
@@ -2973,7 +2973,7 @@ void tputc(Rune u) {
     if (strescseq.len + len >= sizeof(strescseq.buf) - 1) {
       /*
        * Here is a bug in terminals. If the user never sends
-       * some code to stop the str or esc command, then st
+       * some code to stop the str or esc command, then xst
        * will stop responding. But this is better than
        * silently failing with unknown characters. At least
        * then users will report back.
@@ -3331,7 +3331,7 @@ int xloadfont(Font *f, FcPattern *pattern) {
          XftResultMatch) ||
         haveattr < wantattr) {
       f->badslant = 1;
-      fputs("st: font slant does not match\n", stderr);
+      fputs("xst: font slant does not match\n", stderr);
     }
   }
 
@@ -3341,7 +3341,7 @@ int xloadfont(Font *f, FcPattern *pattern) {
          XftResultMatch) ||
         haveattr != wantattr) {
       f->badweight = 1;
-      fputs("st: font weight does not match\n", stderr);
+      fputs("xst: font weight does not match\n", stderr);
     }
   }
 
@@ -3374,7 +3374,7 @@ void xloadfonts(char *fontstr, double fontsize) {
   }
 
   if (!pattern)
-    die("st: can't open font %s\n", fontstr);
+    die("xst: can't open font %s\n", fontstr);
 
   if (fontsize > 1) {
     FcPatternDel(pattern, FC_PIXEL_SIZE);
@@ -3400,7 +3400,7 @@ void xloadfonts(char *fontstr, double fontsize) {
   }
 
   if (xloadfont(&dc.font, pattern))
-    die("st: can't open font %s\n", fontstr);
+    die("xst: can't open font %s\n", fontstr);
 
   if (usedfontsize < 0) {
     FcPatternGetDouble(dc.font.match->pattern, FC_PIXEL_SIZE, 0, &fontval);
@@ -3417,19 +3417,19 @@ void xloadfonts(char *fontstr, double fontsize) {
   FcPatternDel(pattern, FC_SLANT);
   FcPatternAddInteger(pattern, FC_SLANT, FC_SLANT_ITALIC);
   if (xloadfont(&dc.ifont, pattern))
-    die("st: can't open font %s\n", fontstr);
+    die("xst: can't open font %s\n", fontstr);
   if (bold_font) {
     FcPatternDel(pattern, FC_WEIGHT);
     FcPatternAddInteger(pattern, FC_WEIGHT, FC_WEIGHT_BOLD);
   }
 
   if (xloadfont(&dc.ibfont, pattern))
-    die("st: can't open font %s\n", fontstr);
+    die("xst: can't open font %s\n", fontstr);
 
   FcPatternDel(pattern, FC_SLANT);
   FcPatternAddInteger(pattern, FC_SLANT, FC_SLANT_ROMAN);
   if (xloadfont(&dc.bfont, pattern))
-    die("st: can't open font %s\n", fontstr);
+    die("xst: can't open font %s\n", fontstr);
 
   FcPatternDestroy(pattern);
 }
@@ -3948,7 +3948,7 @@ void xdrawcursor(void) {
     switch (xw.cursor) {
     case 9:
     case 8:
-    case 7: /* st extension: snowman */
+    case 7: /* xst extension: snowman */
       utf8decode(xw.cursor > 7 ? "🐱" : "☃", &g.u, UTF_SIZ);
     case 0: /* Blinking Block */
     case 1: /* Blinking Block (Default) */
@@ -3991,7 +3991,7 @@ void xsettitle(char *p) {
   XFree(prop.value);
 }
 
-void xresettitle(void) { xsettitle(opt_title ? opt_title : "st"); }
+void xresettitle(void) { xsettitle(opt_title ? opt_title : "xst"); }
 
 void redraw(void) {
   tfulldirt();
@@ -4494,7 +4494,7 @@ int main(int argc, char *argv[]) {
     opt_embed = EARGF(usage());
     break;
   case 'v':
-    die("%s " VERSION " (c) 2010-2016 st engineers\n", argv0);
+    die("%s " VERSION " (c) 2010-2016 xst engineers\n", argv0);
     break;
   case 'x':
     opt_xresources = EARGF(usage());
