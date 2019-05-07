@@ -155,10 +155,10 @@ static Shortcut shortcuts[] = {
     {MODKEY, XK_c, clipcopy, {.i = 0}},
     {MODKEY, XK_v, clippaste, {.i = 0}},
 
-    {MODKEY | ShiftMask, XK_K, kscrollup, {.i = 1}},
-    {MODKEY | ShiftMask, XK_J, kscrolldown, {.i = 1}},
-    {MODKEY | ControlMask | ShiftMask, XK_K, kscrollup, {.i = 10}},
-    {MODKEY | ControlMask | ShiftMask, XK_J, kscrolldown, {.i = 10}},
+    {ControlMask, XK_Up, kscrollup, {.i = 1}},
+    {ControlMask, XK_Down, kscrolldown, {.i = 1}},
+    {ControlMask | ShiftMask, XK_Up, kscrollup, {.i = 10}},
+    {ControlMask | ShiftMask, XK_Down, kscrolldown, {.i = 10}},
 
     {MODKEY, XK_Num_Lock, numlock, {.i = 0}},
     {MODKEY | ControlMask, XK_i, iso14755, {.i = 0}},
