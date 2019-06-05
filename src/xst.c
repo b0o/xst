@@ -3631,6 +3631,7 @@ int xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len,
   FcFontSet *fcsets[] = {NULL};
   FcCharSet *fccharset;
   int i, f, numspecs = 0;
+  XftFont *xfont = NULL;
 
   for (i = 0, xp = winx, yp = winy + font->ascent; i < len; ++i) {
     /* Fetch rune and mode for current glyph. */
@@ -3703,6 +3704,7 @@ int xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len,
       FcCharSetAddChar(fccharset, rune);
       FcPatternAddCharSet(fcpattern, FC_CHARSET, fccharset);
       FcPatternAddBool(fcpattern, FC_SCALABLE, 1);
+      FcPatternAddBool(fcpattern, FC_COLOR, FcFalse);
 
       FcConfigSubstitute(0, fcpattern, FcMatchPattern);
       FcDefaultSubstitute(fcpattern);
@@ -3718,10 +3720,26 @@ int xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len,
         frc[frclen].unicodep = 0;
       }
 
-      frc[frclen].font = XftFontOpenPattern(xw.dpy, fontpattern);
+      xfont = XftFontOpenPattern(xw.dpy, fontpattern);
       frc[frclen].flags = frcflags;
       frc[frclen].unicodep = rune;
 
+      /* Do not allow using color fonts. This is a workaround for a BadLength
+       * error from Xft with color glyphs. Modelled on the Xterm workaround. See
+       * https://bugzilla.redhat.com/show_bug.cgi?id=1498269
+       * https://lists.suckless.org/dev/1701/30932.html
+       * https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=916349
+       * and lots more all over the internet.
+       */
+      FcBool iscol;
+      if (FcPatternGetBool(xfont->pattern, FC_COLOR, 0, &iscol) ==
+              FcResultMatch &&
+          iscol) {
+        XftFontClose(xw.dpy, xfont);
+        continue;
+      }
+
+      frc[frclen].font = xfont;
       glyphidx = XftCharIndex(xw.dpy, frc[frclen].font, rune);
 
       f = frclen;
